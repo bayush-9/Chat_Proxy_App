@@ -14,9 +14,14 @@ class NewGroupForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            // Expanded(
-            //   child: Messages(),
-            // ),
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: null,
+            ),
+            FlatButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.image),
+                label: Text("Group Icon")),
             NewGroupFields(),
           ],
         ),

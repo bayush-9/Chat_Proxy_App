@@ -31,9 +31,11 @@ class _MessagesState extends State<Messages> {
           return ListView.builder(
             controller: listScrollController,
             itemBuilder: (context, index) => MessageBubble(
-                chatDocs[index]['username'],
-                chatDocs[index]['text'],
-                chatDocs[index]['userId'] == userId),
+              chatDocs[index]['username'],
+              chatDocs[index]['text'],
+              chatDocs[index]['userId'] == userId,
+              chatDocs[index]['userId'].toString().trim(),
+            ),
             itemCount: chatDocs.length,
           );
         },

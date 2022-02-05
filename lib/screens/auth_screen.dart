@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isloading = false;
   final _auth = FirebaseAuth.instance;
   void _submitFn(String email, String password, String username, bool isLogin,
-      BuildContext ctx) async {
+      File image, BuildContext ctx) async {
     AuthResult authResult;
     try {
       setState(() {
@@ -38,12 +40,20 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child(authResult.user.uid + '.jpg');
+        await ref.putFile(image).onComplete;
+
+        final url = await ref.getDownloadURL();
         await Firestore.instance
             .collection('users')
             .document(authResult.user.uid)
             .setData({
           'username': username,
           'email': email,
+          'userImage': url,
         });
         final FirebaseUser user = await FirebaseAuth.instance.currentUser();
         final userid = user.uid;
@@ -73,16 +83,20 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Image.asset('assets/images/screenshot(213).jpeg'),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AuthForm(_submitFn, _isloading),
-          ),
-        ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Image.asset('assets/images/screenshot(213).jpeg'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AuthForm(_submitFn, _isloading),
+            ),
+          ],
+        ),
       ),
     );
   }

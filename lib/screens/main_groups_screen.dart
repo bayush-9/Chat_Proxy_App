@@ -30,10 +30,22 @@ class _Work2State extends State<Work2> {
             .document(userId.trim())
             .get()
             .then((value) {
+          if (value.data == null) {
+            setState(() {
+              isloading = false;
+            });
+            return;
+          }
           Provider.of<User>(context, listen: false)
               .setEmail(value.data['email']);
           Provider.of<User>(context, listen: false)
               .setUserName(value.data['username']);
+          if (value.data['userGroups'] == null) {
+            setState(() {
+              isloading = false;
+            });
+            return;
+          }
           List.from(value.data['userGroups']).forEach((element) {
             var data = new GroupId(element.toString());
             print(data);
