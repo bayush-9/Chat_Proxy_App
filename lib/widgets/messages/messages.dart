@@ -50,8 +50,10 @@ class _MessagesState extends State<Messages> {
         padding: EdgeInsets.only(
             bottom: 50.0, left: MediaQuery.of(context).size.width - 40),
         child: FloatingActionButton(
+          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(2)),
           elevation: 0,
-          child: Icon(Icons.arrow_downward_rounded),
+          child:
+              Container(height: 50, child: Icon(Icons.arrow_downward_rounded)),
           backgroundColor: Colors.blue.withOpacity(0.5),
           onPressed: () {
             if (listScrollController.hasClients) {

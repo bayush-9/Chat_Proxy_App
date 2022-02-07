@@ -49,16 +49,18 @@ class MessageBubble extends StatelessWidget {
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        userName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: isMe ? Colors.black : Colors.white,
+                      if (!isMe)
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
+                      if (!isMe)
+                        Text(
+                          userName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isMe ? Colors.black : Colors.white,
+                          ),
+                        ),
                       Text(
                         message,
                         style: TextStyle(
@@ -70,15 +72,17 @@ class MessageBubble extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              top: -10,
-              left: isMe ? width - 43 : 3,
-              child: CircleAvatar(
-                backgroundImage: snapshot.data != null
-                    ? NetworkImage(snapshot.data['userImage'])
-                    : null,
+            if (!isMe)
+              Positioned(
+                top: -10,
+                left: isMe ? width - 43 : 3,
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[800],
+                  backgroundImage: snapshot.data != null
+                      ? NetworkImage(snapshot.data['userImage'])
+                      : null,
+                ),
               ),
-            ),
           ],
         );
       },

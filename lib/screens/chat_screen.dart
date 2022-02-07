@@ -36,6 +36,9 @@ class ChatScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            SizedBox(
+              height: 15,
+            ),
             Expanded(
               child: Messages(),
             ),

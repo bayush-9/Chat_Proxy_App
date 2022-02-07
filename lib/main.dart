@@ -6,6 +6,7 @@ import 'package:chat_app/screens/group_details_screen.dart';
 import 'package:chat_app/screens/navigation_screen.dart';
 import 'package:chat_app/screens/new_group_form.dart';
 import 'package:chat_app/screens/proxy_managing_screen.dart';
+import 'package:chat_app/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
           ),
           home: StreamBuilder(
             builder: (context, userSnapshot) {
+              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                return SplashScreen();
+              }
               if (userSnapshot.hasData) {
                 final data = userSnapshot.data;
                 print(data);
@@ -42,7 +46,6 @@ class MyApp extends StatelessWidget {
               } else {
                 return AuthScreen();
               }
-              // return AuthScreen();
             },
             stream: FirebaseAuth.instance.onAuthStateChanged,
           ),

@@ -1,4 +1,5 @@
 import 'package:chat_app/providers/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,11 +11,47 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           title: Text("My profile"),
         ),
-        body: Column(
-          children: [
-            Text(activeUser.email),
-            Text(activeUser.userName),
-          ],
-        ));
+        body: FutureBuilder(
+            future: Firestore.instance
+                .collection('users')
+                .document(activeUser.userId.trim())
+                .get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return ListView(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.grey[800],
+                    backgroundImage: NetworkImage(snapshot.data['userImage']),
+                    radius: MediaQuery.of(context).size.width / 3,
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Text(
+                        "User Name: ",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      title: Text(activeUser.userName,
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Text(
+                        "Email Id: ",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      title: Text(activeUser.email,
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                  ),
+                ],
+              );
+            }));
   }
 }
