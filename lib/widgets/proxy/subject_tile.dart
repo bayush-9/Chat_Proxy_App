@@ -5,7 +5,14 @@ class SubjectTile extends StatelessWidget {
   Function addPerson;
   int present;
   int absent;
-  SubjectTile({this.lectureName, this.present, this.absent, this.addPerson});
+  bool hasUpdated;
+
+  SubjectTile(
+      {this.lectureName,
+      this.present,
+      this.absent,
+      this.hasUpdated,
+      this.addPerson});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -21,7 +28,7 @@ class SubjectTile extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(Icons.group_add_sharp),
-          onPressed: addPerson,
+          onPressed: !hasUpdated ? addPerson : null,
         ),
       ],
     );

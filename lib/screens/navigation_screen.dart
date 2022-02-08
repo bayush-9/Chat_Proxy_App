@@ -1,5 +1,3 @@
-import 'package:chat_app/screens/group_screen_work.dart';
-import 'package:chat_app/screens/groups_screen.dart';
 import 'package:chat_app/screens/join_group.dart';
 import 'package:chat_app/screens/new_group_form.dart';
 import 'package:chat_app/screens/profile_screen.dart';
@@ -31,9 +29,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('ProxyManager'),
-      // ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

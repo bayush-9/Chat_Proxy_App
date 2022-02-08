@@ -1,3 +1,4 @@
+import 'package:chat_app/widgets/groups/group_icon_picker.dart';
 import 'package:chat_app/widgets/groups/new_group_fields.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +15,7 @@ class NewGroupForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: null,
-            ),
-            FlatButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.image),
-                label: Text("Group Icon")),
+            GroupIconPicker(null),
             NewGroupFields(),
           ],
         ),

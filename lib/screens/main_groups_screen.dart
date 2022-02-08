@@ -81,7 +81,7 @@ class _Work2State extends State<Work2> {
         title: Text("Groups"),
       ),
       body: isloading
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : GroupList(Provider.of<Groups>(context, listen: false).groupsList),
     );
   }
