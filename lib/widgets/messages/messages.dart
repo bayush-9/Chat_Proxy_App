@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Messages extends StatefulWidget {
+  Function scrollDown;
+  Messages(this.scrollDown);
   @override
   State<Messages> createState() => _MessagesState();
 }
@@ -15,9 +17,10 @@ class _MessagesState extends State<Messages> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController listScrollController = ScrollController();
+
     final activeGroup = Provider.of<Groups>(context, listen: false).activeGroup;
     final userId = Provider.of<User>(context, listen: false).userId;
-    ScrollController listScrollController = ScrollController();
     return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
       StreamBuilder(
         builder: (ctx, chatSnapshot) {
@@ -55,12 +58,7 @@ class _MessagesState extends State<Messages> {
           child:
               Container(height: 50, child: Icon(Icons.arrow_downward_rounded)),
           backgroundColor: Colors.blue.withOpacity(0.5),
-          onPressed: () {
-            if (listScrollController.hasClients) {
-              final position = listScrollController.position.maxScrollExtent;
-              listScrollController.jumpTo(position);
-            }
-          },
+          onPressed: widget.scrollDown(listScrollController),
         ),
       ),
     ]);
