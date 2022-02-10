@@ -15,6 +15,37 @@ class Work2 extends StatefulWidget {
 class _Work2State extends State<Work2> {
   bool isloading = true;
 
+  Future confirmSignout(BuildContext ctx) {
+    return showDialog(
+      context: ctx,
+      builder: (ctx) => AlertDialog(
+        title: Text("Confirm Logout"),
+        content: Text("Are you sure you want to Logout?"),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              "Cancel",
+            ),
+          ),
+          FlatButton(
+            color: Colors.red,
+            onPressed: () {
+              Navigator.of(context).pop();
+              FirebaseAuth.instance.signOut();
+            },
+            child: Text(
+              "Logout",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   bool _checkConfiguration() => true;
   @override
   void initState() {
@@ -72,9 +103,10 @@ class _Work2State extends State<Work2> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-            },
+            onPressed: () => confirmSignout(context),
+            //  () async {
+            //   await FirebaseAuth.instance.signOut();
+            // },
             icon: Icon(Icons.logout),
           ),
         ],

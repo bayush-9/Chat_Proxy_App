@@ -86,9 +86,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     StreamBuilder(
                       builder: (ctx, chatSnapshot) {
-                        // if (chatSnapshot.connectionState == ConnectionState.waiting) {
-                        //   return Container(height: 200, child: CircularProgressIndicator());
-                        // }
+                        if (chatSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                              height: 200, child: CircularProgressIndicator());
+                        }
                         final chatDocs = chatSnapshot.data.documents;
                         if (chatDocs.length == 0) {
                           return Text("NO message yet");

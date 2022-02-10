@@ -9,6 +9,11 @@ class GroupDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CollectionReference users = Firestore.instance.collection('groups');
+    Widget listTile(String txt1, String txt2) {
+      return ListTile(
+        title: Text(txt1 + txt2),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -29,15 +34,15 @@ class GroupDetails extends StatelessWidget {
             Map<String, dynamic> data = snapshot.data.data;
             final Timestamp timestamp = snapshot.data['timeStamp'] as Timestamp;
             final DateTime dateTime = timestamp.toDate();
-            return Column(
+            return ListView(
               children: [
-                Text("Created on : ${dateTime.toString()} "),
-                Text("Unique Joining code: ${data['uniqueId']}")
+                listTile("Created on : ", dateTime.toString()),
+                listTile("Unique Joining code: ", data['uniqueId'])
               ],
             );
           }
 
-          return Text("loading");
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

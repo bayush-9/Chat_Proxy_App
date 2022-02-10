@@ -60,7 +60,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               Icons.person_sharp,
               color: Colors.amber,
             ),
-            label: 'Join Group',
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
