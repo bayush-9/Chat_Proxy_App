@@ -8,8 +8,10 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final activeUser = Provider.of<User>(context, listen: false);
     return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text("My profile"),
+          shadowColor: Colors.blue,
         ),
         body: FutureBuilder(
             future: Firestore.instance
@@ -32,9 +34,12 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Card(
                     child: ListTile(
+                      tileColor: Colors.black,
                       leading: Text(
                         "User Name: ",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).textTheme.headline1.color),
                       ),
                       title: Text(activeUser.userName,
                           style: TextStyle(fontSize: 20)),

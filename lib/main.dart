@@ -31,9 +31,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primaryColor: Color.fromARGB(255, 242, 101, 121),
+            textTheme: TextTheme(headline1: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.grey,
+            primaryColor: Colors.black,
             appBarTheme: AppBarTheme(
-                backgroundColor: Color.fromARGB(255, 242, 101, 121)),
+              backgroundColor: Colors.grey[900],
+            ),
           ),
           home: StreamBuilder(
             builder: (context, userSnapshot) {

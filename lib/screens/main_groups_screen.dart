@@ -100,7 +100,10 @@ class _Work2State extends State<Work2> {
     print(widget.groupIdList);
     print("here");
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        elevation: 5,
+        shadowColor: Colors.blue,
         actions: [
           IconButton(
             onPressed: () => confirmSignout(context),
