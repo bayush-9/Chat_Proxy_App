@@ -53,6 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     return Scaffold(
+      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_sharp),

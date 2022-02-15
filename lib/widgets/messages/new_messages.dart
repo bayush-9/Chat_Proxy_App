@@ -42,13 +42,18 @@ class _NewMessagesState extends State<NewMessages> {
         children: [
           Expanded(
             child: TextField(
+              style: TextStyle(color: Colors.red),
               controller: _message,
-              decoration: InputDecoration(labelText: 'Send a message..'),
-              onChanged: (value) {
-                setState(() {
-                  _enteredMessage = value;
-                });
-              },
+              decoration: InputDecoration(
+                  fillColor: Colors.orange,
+                  filled: true,
+                  labelText: 'Send a message',
+                  hintStyle: TextStyle(color: Colors.blue)),
+              // onChanged: (value) {
+              //   setState(() {
+              //     _enteredMessage = value;
+              //   });
+              // },
             ),
           ),
           IconButton(
