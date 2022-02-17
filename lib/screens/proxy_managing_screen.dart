@@ -24,6 +24,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
           .collection('proxyStatus')
           .add({
         'lectureName': name,
+        'people': [],
         'timeStamp': DateTime.now(),
         'status': [0, 0],
       });
@@ -56,6 +57,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text('Plan your presence'),
       ),
@@ -64,7 +66,9 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
           ListTile(
             title: Text(
               'Lecture            Status      Choice',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyText1.color),
             ),
           ),
           Expanded(
@@ -81,15 +85,34 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                       bool contains = false;
                       // if (chatDocs[index]['people']) {}
                       List<dynamic> ids = chatDocs[index]['people'];
-                      if (ids.contains(activeUser.userId)) {
+                      if (ids != null && ids.contains(activeUser.userId)) {
                         contains = true;
                       }
                       return ListTile(
                         title: SubjectTile(
+                          userIds: chatDocs[index]['people'],
                           absent: chatDocs[index]['status'][0],
                           lectureName: chatDocs[index]['lectureName'],
                           present: chatDocs[index]['status'][1],
                           hasUpdated: contains,
+                          removePerson: () async => {
+                            await Firestore.instance.runTransaction(
+                              (Transaction myTransaction) async {
+                                await myTransaction.update(
+                                  lectureSnapshot
+                                      .data.documents[index].reference,
+                                  {
+                                    "status": [
+                                      chatDocs[index]['status'][0],
+                                      chatDocs[index]['status'][1] - 1
+                                    ],
+                                    "people": FieldValue.arrayRemove(
+                                        [activeUser.userId]),
+                                  },
+                                );
+                              },
+                            ),
+                          },
                           addPerson: () async => {
                             await Firestore.instance.runTransaction(
                               (Transaction myTransaction) async {
@@ -110,7 +133,10 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                           },
                         ),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.blue,
+                          ),
                           onPressed: () async => {
                             await Firestore.instance.runTransaction(
                               (Transaction myTransaction) async {

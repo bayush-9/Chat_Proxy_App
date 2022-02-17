@@ -65,6 +65,25 @@ class _Work2State extends State<Work2> {
 
   @override
   Widget build(BuildContext context) {
+    showSignout() {
+      return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Confirm Signout."),
+          content: Text("Are you sure you want to signout?"),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop();
+              },
+              child: Text("okay"),
+            ),
+          ],
+        ),
+      );
+    }
+
     widget.groupIdList = Provider.of<Groups>(context).groupsList;
     print(widget.groupIdList);
     print("here");
@@ -73,9 +92,7 @@ class _Work2State extends State<Work2> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-            },
+            onPressed: showSignout,
             icon: Icon(Icons.logout),
           ),
         ],
