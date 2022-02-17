@@ -11,15 +11,20 @@ class GroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.blue,
       elevation: 1.5,
       child: ListTile(
+        tileColor: Theme.of(context).backgroundColor,
         onTap: () {
           Provider.of<Groups>(context, listen: false)
               .setActiveGroup(groupId, groupName);
           Navigator.of(context).pushNamed(ChatScreen.routeName);
         },
         leading: CircleAvatar(),
-        title: Text(groupName),
+        title: Text(
+          groupName,
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+        ),
       ),
     );
   }

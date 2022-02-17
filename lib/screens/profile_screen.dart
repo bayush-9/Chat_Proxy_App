@@ -8,6 +8,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final activeUser = Provider.of<User>(context, listen: false);
     return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text("My profile"),
         ),
@@ -32,22 +33,34 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Card(
                     child: ListTile(
+                      tileColor: Theme.of(context).backgroundColor,
                       leading: Text(
                         "User Name: ",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).textTheme.bodyText1.color),
                       ),
                       title: Text(activeUser.userName,
-                          style: TextStyle(fontSize: 20)),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color)),
                     ),
                   ),
                   Card(
                     child: ListTile(
+                      tileColor: Theme.of(context).backgroundColor,
                       leading: Text(
                         "Email Id: ",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).textTheme.bodyText1.color),
                       ),
                       title: Text(activeUser.email,
-                          style: TextStyle(fontSize: 20)),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color)),
                     ),
                   ),
                 ],

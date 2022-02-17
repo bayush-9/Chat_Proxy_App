@@ -41,7 +41,7 @@ class MessageBubble extends StatelessWidget {
                     horizontal: 16,
                   ),
                   margin: EdgeInsets.symmetric(
-                    vertical: 12,
+                    vertical: isMe ? 5 : 12,
                     horizontal: 8,
                   ),
                   child: Column(

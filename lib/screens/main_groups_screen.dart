@@ -69,6 +69,7 @@ class _Work2State extends State<Work2> {
     print(widget.groupIdList);
     print("here");
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         actions: [
           IconButton(

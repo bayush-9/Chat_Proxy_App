@@ -48,18 +48,34 @@ class _NewGroupFieldsState extends State<NewGroupFields> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _groupName,
-              decoration: InputDecoration(labelText: 'Group Name'),
-              onChanged: (value) {
-                setState(() {
-                  _enteredGroupName = value;
-                });
-              },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: Colors.blue)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: TextField(
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
+                  controller: _groupName,
+                  decoration: InputDecoration(
+                      labelText: '  Group Name...',
+                      labelStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color)),
+                  onChanged: (value) {
+                    setState(() {
+                      _enteredGroupName = value;
+                    });
+                  },
+                ),
+              ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.done),
+            icon: Icon(
+              Icons.done,
+              color: Colors.blue,
+            ),
             onPressed: _enteredGroupName.trim().isEmpty ? null : _sendMessage,
           ),
         ],

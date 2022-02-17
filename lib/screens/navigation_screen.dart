@@ -33,38 +33,38 @@ class _NavigationScreenState extends State<NavigationScreen> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        type: BottomNavigationBarType.fixed, // Shifting
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.group,
-              color: Colors.amber,
             ),
             label: 'My groups',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.add,
-              color: Colors.amber,
             ),
             label: 'Create group',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.input,
-              color: Colors.amber,
             ),
             label: 'Join Group',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_sharp,
-              color: Colors.amber,
             ),
             label: 'Join Group',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        // selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
     );

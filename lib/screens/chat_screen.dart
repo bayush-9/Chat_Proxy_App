@@ -4,6 +4,7 @@ import 'package:chat_app/screens/group_details_screen.dart';
 import 'package:chat_app/screens/proxy_managing_screen.dart';
 import 'package:chat_app/widgets/chat/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,6 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_sharp),
@@ -144,15 +146,27 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _message,
-                      decoration:
-                          InputDecoration(labelText: 'Send a message..'),
-                      onChanged: (value) {
-                        setState(() {
-                          _enteredMessage = value;
-                        });
-                      },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.blue)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: TextField(
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          controller: _message,
+                          decoration: InputDecoration(
+                              labelText: '  Send a message..',
+                              labelStyle: TextStyle(color: Colors.white)),
+                          onChanged: (value) {
+                            setState(() {
+                              _enteredMessage = value;
+                            });
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   IconButton(
