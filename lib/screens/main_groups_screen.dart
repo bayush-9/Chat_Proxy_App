@@ -70,9 +70,14 @@ class _Work2State extends State<Work2> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text("Confirm Signout."),
-          content: Text("Are you sure you want to signout?"),
+          content: Text(
+            "Are you sure you want to signout?",
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ),
           actions: <Widget>[
             FlatButton(
+              color: Colors.white,
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Navigator.of(context).pop();
@@ -85,8 +90,6 @@ class _Work2State extends State<Work2> {
     }
 
     widget.groupIdList = Provider.of<Groups>(context).groupsList;
-    print(widget.groupIdList);
-    print("here");
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(

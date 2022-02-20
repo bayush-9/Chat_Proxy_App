@@ -28,11 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     final activeGroup = Provider.of<Groups>(context, listen: false).activeGroup;
     final userId = Provider.of<User>(context, listen: false).userId;
-    void _sendMessage() {
-      if (listScrollController.hasClients) {
-        final position = listScrollController.position.maxScrollExtent;
-        listScrollController.jumpTo(position);
-      }
+    Future<void> _sendMessage() async {
       FocusScope.of(context).unfocus();
       var activeGroupId =
           Provider.of<Groups>(context, listen: false).activeGroupId;
@@ -50,6 +46,10 @@ class _ChatScreenState extends State<ChatScreen> {
           'username': userName
         },
       );
+      if (listScrollController.hasClients) {
+        final position = listScrollController.position.maxScrollExtent;
+        await listScrollController.jumpTo(position);
+      }
       _message.clear();
     }
 

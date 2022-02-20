@@ -8,6 +8,7 @@ import 'package:chat_app/screens/new_group_form.dart';
 import 'package:chat_app/screens/proxy_managing_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,12 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.black,
+            dialogTheme: DialogTheme(
+                backgroundColor: Colors.grey[900],
+                titleTextStyle: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
             appBarTheme: AppBarTheme(backgroundColor: Colors.grey[900]),
           ),
           home: StreamBuilder(

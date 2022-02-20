@@ -65,7 +65,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
         children: [
           ListTile(
             title: Text(
-              'Lecture            Status      Choice',
+              'Lecture                Status            Choice',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.bodyText1.color),

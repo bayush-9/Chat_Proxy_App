@@ -11,6 +11,7 @@ class GroupDetails extends StatelessWidget {
     CollectionReference users = Firestore.instance.collection('groups');
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title:
             Text(Provider.of<Groups>(context, listen: false).activeGroup.name),
@@ -29,10 +30,43 @@ class GroupDetails extends StatelessWidget {
             Map<String, dynamic> data = snapshot.data.data;
             final Timestamp timestamp = snapshot.data['timeStamp'] as Timestamp;
             final DateTime dateTime = timestamp.toDate();
-            return Column(
+            return ListView(
               children: [
-                Text("Created on : ${dateTime.toString()} "),
-                Text("Unique Joining code: ${data['uniqueId']}")
+                SizedBox(
+                  height: 20,
+                ),
+                Card(
+                  child: ListTile(
+                    tileColor: Theme.of(context).backgroundColor,
+                    leading: Text(
+                      "Unique Joining code:",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                    ),
+                    title: Text(data['uniqueId'],
+                        style: TextStyle(
+                            fontSize: 20,
+                            color:
+                                Theme.of(context).textTheme.bodyText1.color)),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    tileColor: Theme.of(context).backgroundColor,
+                    leading: Text(
+                      "Created on :  ",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                    ),
+                    title: Text(dateTime.toString(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color:
+                                Theme.of(context).textTheme.bodyText1.color)),
+                  ),
+                ),
               ],
             );
           }

@@ -89,27 +89,56 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _groupName,
-              decoration: InputDecoration(labelText: 'Group unique Id'),
-              onChanged: (value) {
-                setState(() {
-                  _enteredGroupName = value;
-                });
-              },
-            ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Container(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.blue)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: TextField(
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          controller: _groupName,
+                          decoration: InputDecoration(
+                              labelText: '  Group Unique id...',
+                              labelStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color)),
+                          onChanged: (value) {
+                            setState(() {
+                              _enteredGroupName = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.done, color: Colors.blue),
+                    onPressed: _enteredGroupName.isEmpty
+                        ? null
+                        : () => _sendMessage(context),
+                  ),
+                ],
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.done),
-            onPressed:
-                _enteredGroupName.isEmpty ? null : () => _sendMessage(context),
-          ),
-        ],
+        ),
       ),
     );
   }
