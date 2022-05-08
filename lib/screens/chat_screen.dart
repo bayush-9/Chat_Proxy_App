@@ -3,6 +3,7 @@ import 'package:chat_app/providers/user.dart';
 import 'package:chat_app/screens/group_details_screen.dart';
 import 'package:chat_app/screens/proxy_managing_screen.dart';
 import 'package:chat_app/widgets/chat/message_bubble.dart';
+import 'package:chat_app/widgets/messages/replyMessageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   static const routeName = '/chats-screen';
+  String replymessage;
+  String replyUser;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -25,15 +28,18 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     ScrollController listScrollController = ScrollController();
-
+    final tfocusnode = FocusNode();
     final activeGroup = Provider.of<Groups>(context, listen: false).activeGroup;
     final userId = Provider.of<User>(context, listen: false).userId;
+    final isReplying = (widget.replymessage != null);
+
     Future<void> _sendMessage() async {
       FocusScope.of(context).unfocus();
       var activeGroupId =
           Provider.of<Groups>(context, listen: false).activeGroupId;
       var userId = Provider.of<User>(context, listen: false).userId;
       var userName = Provider.of<User>(context, listen: false).userName;
+
       Firestore.instance
           .collection('groups')
           .document(activeGroupId)
@@ -43,14 +49,53 @@ class _ChatScreenState extends State<ChatScreen> {
           'text': _enteredMessage,
           'timeStamp': DateTime.now(),
           'userId': userId,
-          'username': userName
+          'username': userName,
+          'isReplying': widget.replymessage != null,
+          'replyMessage': widget.replymessage,
+          'replyUsername': widget.replyUser
         },
       );
       if (listScrollController.hasClients) {
         final position = listScrollController.position.maxScrollExtent;
         await listScrollController.jumpTo(position);
       }
+      setState(() {
+        widget.replymessage = null;
+      });
+
       _message.clear();
+    }
+
+    void replyToMessage(String message, String userName) {
+      setState(() {
+        widget.replymessage = message;
+        widget.replyUser = userName;
+      });
+      // tfocusnode.requestFocus();
+    }
+
+    Widget buildReply() {
+      tfocusnode.requestFocus();
+      return Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        child: ReplyMessageWidget(
+          txtColor: Colors.white,
+          message: widget.replymessage,
+          userName: widget.replyUser,
+          onCancelReply: () {
+            setState(() {
+              widget.replymessage = null;
+            });
+          },
+        ),
+      );
     }
 
     return Scaffold(
@@ -72,7 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               onPressed: () =>
                   Navigator.pushNamed(context, ProxyManagementScreen.routeName),
-              icon: Icon(Icons.precision_manufacturing_outlined))
+              icon: Icon(Icons.mark_chat_read_rounded))
         ],
       ),
       body: Container(
@@ -103,10 +148,19 @@ class _ChatScreenState extends State<ChatScreen> {
                         return ListView.builder(
                           controller: listScrollController,
                           itemBuilder: (context, index) => MessageBubble(
-                            chatDocs[index]['username'],
-                            chatDocs[index]['text'],
-                            chatDocs[index]['userId'] == userId,
-                            chatDocs[index]['userId'].toString().trim(),
+                            isMe: chatDocs[index]['userId'] == userId,
+                            isReplying: chatDocs[index]['isReplying'],
+                            replyMessage: chatDocs[index]['replyMessage'],
+                            replyUsername: chatDocs[index]['replyUsername'],
+                            userName: chatDocs[index]['username'],
+                            message: chatDocs[index]['text'],
+                            userId: chatDocs[index]['userId'].toString().trim(),
+                            onSwipedMessage: (String message) async {
+                              // await tfocusnode.requestFocus();
+
+                              replyToMessage(chatDocs[index]['text'],
+                                  chatDocs[index]['username']);
+                            },
                           ),
                           itemCount: chatDocs.length,
                         );
@@ -141,41 +195,50 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ]),
             ),
-            Container(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: Colors.blue)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: TextField(
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color),
-                          controller: _message,
-                          decoration: InputDecoration(
-                              labelText: '  Send a message..',
-                              labelStyle: TextStyle(color: Colors.white)),
-                          onChanged: (value) {
-                            setState(() {
-                              _enteredMessage = value;
-                            });
-                          },
+            Column(
+              children: [
+                if (isReplying) buildReply(),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(color: Colors.blue)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: TextField(
+                              focusNode: tfocusnode,
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color),
+                              controller: _message,
+                              decoration: InputDecoration(
+                                  labelText: '  Send a message..',
+                                  labelStyle: TextStyle(color: Colors.white)),
+                              onChanged: (value) {
+                                setState(() {
+                                  _enteredMessage = value;
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      IconButton(
+                        icon: Icon(Icons.send_rounded, color: Colors.blue),
+                        onPressed: _enteredMessage.trim().isEmpty
+                            ? null
+                            : _sendMessage,
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.send_rounded, color: Colors.blue),
-                    onPressed:
-                        _enteredMessage.trim().isEmpty ? null : _sendMessage,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
