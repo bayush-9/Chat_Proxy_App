@@ -16,9 +16,9 @@ class GroupList extends StatelessWidget {
               final String groupId = groupIds[index].id.toString().trim();
               print(groupId);
               return FutureBuilder(
-                future: Firestore.instance
+                future: FirebaseFirestore.instance
                     .collection('groups')
-                    .document(groupId)
+                    .doc(groupId)
                     .get(),
                 builder: (context, snapshot) {
                   print(Provider.of<Groups>(context, listen: false).groupsList);

@@ -56,23 +56,22 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     bool flag = true;
     FocusScope.of(context).unfocus();
     String groupId = _enteredGroupName.trim();
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('groups')
         .where('uniqueId', isEqualTo: groupId)
         .limit(1)
-        .getDocuments()
+        .get()
         // .onError((error, stackTrace) => _showErrorDialog(context))
         .then(
-          (value) async => value.documents.forEach(
+          (value) async => value.docs.forEach(
             (element) async {
               flag = false;
               print(element);
-              groupId = element.documentID;
-              await Firestore.instance
+              groupId = element['documentID'];
+              await FirebaseFirestore.instance
                   .collection('users')
-                  .document(
-                      Provider.of<User>(context, listen: false).userId.trim())
-                  .updateData({
+                  .doc(Provider.of<User>(context, listen: false).userId.trim())
+                  .set({
                 'userGroups': FieldValue.arrayUnion([groupId])
               }).then(
                 (value) => _showSuccessSnackBar(context),

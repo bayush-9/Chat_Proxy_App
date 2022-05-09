@@ -18,9 +18,9 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
     final activeUser = Provider.of<User>(context, listen: false);
     TextEditingController newLectureName;
     _submit(String name) {
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection('groups')
-          .document(activeGroup.id)
+          .doc(activeGroup.id)
           .collection('proxyStatus')
           .add({
         'lectureName': name,
@@ -78,7 +78,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                     ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 }
-                final chatDocs = lectureSnapshot.data.documents;
+                final chatDocs = lectureSnapshot.data.docs;
                 if (chatDocs != null)
                   return ListView.builder(
                     itemBuilder: (context, index) {
@@ -96,7 +96,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                           present: chatDocs[index]['status'][1],
                           hasUpdated: contains,
                           removePerson: () async => {
-                            await Firestore.instance.runTransaction(
+                            await FirebaseFirestore.instance.runTransaction(
                               (Transaction myTransaction) async {
                                 await myTransaction.update(
                                   lectureSnapshot
@@ -114,7 +114,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                             ),
                           },
                           addPerson: () async => {
-                            await Firestore.instance.runTransaction(
+                            await FirebaseFirestore.instance.runTransaction(
                               (Transaction myTransaction) async {
                                 await myTransaction.update(
                                   lectureSnapshot
@@ -138,7 +138,7 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                             color: Colors.blue,
                           ),
                           onPressed: () async => {
-                            await Firestore.instance.runTransaction(
+                            await FirebaseFirestore.instance.runTransaction(
                               (Transaction myTransaction) async {
                                 await myTransaction.delete(lectureSnapshot
                                     .data.documents[index].reference);
@@ -152,9 +152,9 @@ class _ProxyManagementScreenState extends State<ProxyManagementScreen> {
                   );
                 return Center(child: Text(""));
               },
-              stream: Firestore.instance
+              stream: FirebaseFirestore.instance
                   .collection('groups')
-                  .document(activeGroup.id)
+                  .doc(activeGroup.id)
                   .collection('proxyStatus')
                   .snapshots(),
             ),

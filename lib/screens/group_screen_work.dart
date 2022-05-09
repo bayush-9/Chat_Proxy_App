@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:chat_app/widgets/groups/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +14,13 @@ class GroupsScreenWork extends StatefulWidget {
 
 class _GroupsScreenWorkState extends State<GroupsScreenWork> {
   getdata() {
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("users")
-        .document('LxOQI4GX4gbOIZnGKkNnLXbOYyX2')
+        .doc('LxOQI4GX4gbOIZnGKkNnLXbOYyX2')
         .get()
         .then((value) {
       // first add the data to the Offset object
-      List.from(value.data['userGroups']).forEach((element) {
+      List.from(value.data()['userGroups']).forEach((element) {
         String data = element;
         //then add the data to the List<Offset>, now we have a type Offset
         widget.groupIdList.add(data);
@@ -49,21 +49,21 @@ class _GroupsScreenWorkState extends State<GroupsScreenWork> {
           if (chatSnapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
-          final userRef = Firestore.instance.collection('groups');
+          final userRef = FirebaseFirestore.instance.collection('groups');
           final userId =
-              Provider.of<User>(context, listen: false).userId.toString();
-          print(Firestore.instance
+              Provider.of<luser.User>(context, listen: false).userId.toString();
+          print(FirebaseFirestore.instance
               .collection("users")
-              .document(userId)
+              .doc(userId)
               .collection("userGroups")
-              .document()
+              .doc()
               .get());
           print(widget.groupIdList);
-          userRef.getDocuments().then(
+          userRef.get().then(
             (value) {
-              value.documents.forEach(
+              value.docs.forEach(
                 (element) {
-                  widget.arr.add(element.documentID);
+                  widget.arr.add(element['documentID']);
                 },
               );
             },
@@ -79,7 +79,7 @@ class _GroupsScreenWorkState extends State<GroupsScreenWork> {
             itemCount: length,
           );
         },
-        stream: Firestore.instance.collection('groups').snapshots(),
+        stream: FirebaseFirestore.instance.collection('groups').snapshots(),
       ),
     );
   }

@@ -13,9 +13,9 @@ class ProfilePage extends StatelessWidget {
         title: Text("My profile"),
       ),
       body: FutureBuilder(
-        future: Firestore.instance
+        future: FirebaseFirestore.instance
             .collection('users')
-            .document(activeUser.userId.trim())
+            .doc(activeUser.userId.trim())
             .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
               ),
               CircleAvatar(
                 backgroundColor: Colors.grey[800],
-                backgroundImage: NetworkImage(snapshot.data['userImage']),
+                backgroundImage: NetworkImage(snapshot.data()['userImage']),
                 radius: MediaQuery.of(context).size.width / 3,
               ),
               Card(

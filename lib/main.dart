@@ -1,5 +1,5 @@
 import 'package:chat_app/providers/group.dart';
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:chat_app/screens/auth_screen.dart';
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/group_details_screen.dart';
@@ -8,11 +8,40 @@ import 'package:chat_app/screens/new_group_form.dart';
 import 'package:chat_app/screens/proxy_managing_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      // Initialize FlutterFire
+      future: Firebase.initializeApp(),
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          print(snapshot);
+          return MaterialApp(
+            home: Text("Something went wrong"),
+          );
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MyApp();
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return CircularProgressIndicator();
+      },
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +54,7 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Groups(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => User(),
+          create: (ctx) => luser.User(),
         ),
       ],
       child: MaterialApp(
@@ -57,7 +86,7 @@ class MyApp extends StatelessWidget {
                 return AuthScreen();
               }
             },
-            stream: FirebaseAuth.instance.onAuthStateChanged,
+            stream: FirebaseAuth.instance.authStateChanges(),
           ),
           routes: {
             NewGroupForm.routeName: (context) => NewGroupForm(),

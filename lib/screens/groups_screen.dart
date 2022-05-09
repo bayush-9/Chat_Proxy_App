@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:chat_app/widgets/groups/group_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,20 +32,20 @@ class _GroupsScreenState extends State<GroupsScreen> {
           if (chatSnapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
-          final userRef = Firestore.instance.collection('groups');
+          final userRef = FirebaseFirestore.instance.collection('groups');
           final userId =
-              Provider.of<User>(context, listen: false).userId.toString();
-          print(Firestore.instance
+              Provider.of<luser.User>(context, listen: false).userId.toString();
+          print(FirebaseFirestore.instance
               .collection("users")
-              .document(userId)
+              .doc(userId)
               .collection("userGroups")
-              .document());
+              .doc());
 
-          userRef.getDocuments().then(
+          userRef.get().then(
             (value) {
-              value.documents.forEach(
+              value.docs.forEach(
                 (element) {
-                  widget.arr.add(element.documentID);
+                  widget.arr.add(element['documentId']);
                 },
               );
             },
@@ -59,7 +59,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
             itemCount: chatDocs.length,
           );
         },
-        stream: Firestore.instance.collection('groups').snapshots(),
+        stream: FirebaseFirestore.instance.collection('groups').snapshots(),
       ),
     );
   }

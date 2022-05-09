@@ -62,9 +62,9 @@ class SubjectTile extends StatelessWidget {
                                     .color),
                           );
                         },
-                        future: Firestore.instance
+                        future: FirebaseFirestore.instance
                             .collection('users')
-                            .document(userIds[index].toString().trim())
+                            .doc(userIds[index].toString().trim())
                             .get(),
                       );
                     },

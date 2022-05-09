@@ -1,5 +1,5 @@
 import 'package:chat_app/providers/group.dart';
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:chat_app/widgets/groups/group_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +22,12 @@ class _Work2State extends State<Work2> {
     if (_checkConfiguration()) {
       Future.delayed(Duration.zero, () async {
         List<GroupId> groupIdListL = [];
-        final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        final user = await FirebaseAuth.instance.currentUser;
         final userId = user.uid;
-        Provider.of<User>(context, listen: false).setUserId(userId);
-        await Firestore.instance
+        Provider.of<luser.User>(context, listen: false).setUserId(userId);
+        await FirebaseFirestore.instance
             .collection("users")
-            .document(userId.trim())
+            .doc(userId.trim())
             .get()
             .then((value) {
           if (value.data == null) {
@@ -36,17 +36,17 @@ class _Work2State extends State<Work2> {
             });
             return;
           }
-          Provider.of<User>(context, listen: false)
-              .setEmail(value.data['email']);
-          Provider.of<User>(context, listen: false)
-              .setUserName(value.data['username']);
-          if (value.data['userGroups'] == null) {
+          Provider.of<luser.User>(context, listen: false)
+              .setEmail(value.data()['email']);
+          Provider.of<luser.User>(context, listen: false)
+              .setUserName(value.data()['username']);
+          if (value.data()['userGroups'] == null) {
             setState(() {
               isloading = false;
             });
             return;
           }
-          List.from(value.data['userGroups']).forEach((element) {
+          List.from(value.data()['userGroups']).forEach((element) {
             var data = new GroupId(element.toString());
             print(data);
             groupIdListL.add(data);

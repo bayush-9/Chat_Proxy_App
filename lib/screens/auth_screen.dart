@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:chat_app/widgets/auth/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   void _submitFn(String email, String password, String username, bool isLogin,
       File image, BuildContext ctx) async {
-    AuthResult authResult;
+    var authResult;
     try {
       setState(() {
         _isloading = true;
@@ -28,13 +28,13 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        final user = await FirebaseAuth.instance.currentUser;
         final userid = user.uid;
         // final userName =
         //     Firestore.instance.collection('users').document(userid).get();
         print("userId=" + userid);
 
-        Provider.of<User>(context, listen: false).setUserId(userid);
+        Provider.of<luser.User>(context, listen: false).setUserId(userid);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
           email: email,
@@ -44,21 +44,21 @@ class _AuthScreenState extends State<AuthScreen> {
             .ref()
             .child('user_images')
             .child(authResult.user.uid + '.jpg');
-        await ref.putFile(image).onComplete;
+        await ref.putFile(image).whenComplete(() => null);
 
         final url = await ref.getDownloadURL();
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
-            .document(authResult.user.uid)
-            .setData({
+            .doc(authResult.user.uid)
+            .update({
           'username': username,
           'email': email,
           'userImage': url,
         });
-        final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        final user = await FirebaseAuth.instance.currentUser;
         final userid = user.uid;
         print("userId=" + userid);
-        Provider.of<User>(context, listen: false).setUserId(userid);
+        Provider.of<luser.User>(context, listen: false).setUserId(userid);
       }
     } on PlatformException catch (err) {
       var message = 'There was an error while authenticating';

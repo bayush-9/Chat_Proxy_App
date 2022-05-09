@@ -24,18 +24,18 @@ class _NewGroupFieldsState extends State<NewGroupFields> {
             length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
     FocusScope.of(context).unfocus();
-    await Firestore.instance.collection('groups').add(
+    await FirebaseFirestore.instance.collection('groups').add(
       {
         'groupName': _enteredGroupName,
         'timeStamp': DateTime.now(),
         'uniqueId': getRandomString(6),
       },
     ).then((value) {
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection('users')
-          .document(Provider.of<User>(context, listen: false).userId.trim())
-          .updateData({
-        'userGroups': FieldValue.arrayUnion([value.documentID])
+          .doc(Provider.of<User>(context, listen: false).userId.trim())
+          .set({
+        'userGroups': FieldValue.arrayUnion([value])
       });
     });
     _groupName.clear();

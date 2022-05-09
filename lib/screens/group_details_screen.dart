@@ -8,7 +8,7 @@ class GroupDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference users = Firestore.instance.collection('groups');
+    CollectionReference users = FirebaseFirestore.instance.collection('groups');
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -18,7 +18,7 @@ class GroupDetails extends StatelessWidget {
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: users
-            .document(Provider.of<Groups>(context, listen: false).activeGroupId)
+            .doc(Provider.of<Groups>(context, listen: false).activeGroupId)
             .get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -27,7 +27,7 @@ class GroupDetails extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data = snapshot.data.data;
+            Map<String, dynamic> data = snapshot.data.data as Object;
             final Timestamp timestamp = snapshot.data['timeStamp'] as Timestamp;
             final DateTime dateTime = timestamp.toDate();
             return ListView(

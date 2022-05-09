@@ -5,7 +5,6 @@ import 'package:chat_app/screens/proxy_managing_screen.dart';
 import 'package:chat_app/widgets/chat/message_bubble.dart';
 import 'package:chat_app/widgets/messages/replyMessageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,9 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
       var userId = Provider.of<User>(context, listen: false).userId;
       var userName = Provider.of<User>(context, listen: false).userName;
 
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection('groups')
-          .document(activeGroupId)
+          .doc(activeGroupId)
           .collection('chats')
           .add(
         {
@@ -136,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         // if (chatSnapshot.connectionState == ConnectionState.waiting) {
                         //   return Container(height: 200, child: CircularProgressIndicator());
                         // }
-                        final chatDocs = chatSnapshot.data.documents;
+                        final chatDocs = chatSnapshot.data.docs;
                         if (chatDocs.length == 0) {
                           return Text("NO message yet");
                         }
@@ -165,9 +164,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemCount: chatDocs.length,
                         );
                       },
-                      stream: Firestore.instance
+                      stream: FirebaseFirestore.instance
                           .collection('groups')
-                          .document(activeGroup.id)
+                          .doc(activeGroup.id)
                           .collection('chats')
                           .orderBy('timeStamp')
                           .snapshots(),

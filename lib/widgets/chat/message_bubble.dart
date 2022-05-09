@@ -26,8 +26,10 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return FutureBuilder(
-      future:
-          Firestore.instance.collection('users').document(userId.trim()).get(),
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId.trim())
+          .get(),
       builder: (context, snapshot) {
         return Stack(
           clipBehavior: Clip.none,
