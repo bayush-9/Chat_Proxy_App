@@ -28,10 +28,9 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        final user = await FirebaseAuth.instance.currentUser;
+        final user = FirebaseAuth.instance.currentUser;
         final userid = user.uid;
-        // final userName =
-        //     Firestore.instance.collection('users').document(userid).get();
+
         print("userId=" + userid);
 
         Provider.of<luser.User>(context, listen: false).setUserId(userid);
@@ -45,12 +44,15 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_images')
             .child(authResult.user.uid + '.jpg');
         await ref.putFile(image).whenComplete(() => null);
-
+        print("Signup success");
+        print(ref);
         final url = await ref.getDownloadURL();
+        print(url);
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user.uid)
-            .update({
+            .set({
           'username': username,
           'email': email,
           'userImage': url,

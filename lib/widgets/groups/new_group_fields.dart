@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -33,9 +33,9 @@ class _NewGroupFieldsState extends State<NewGroupFields> {
     ).then((value) {
       FirebaseFirestore.instance
           .collection('users')
-          .doc(Provider.of<User>(context, listen: false).userId.trim())
-          .set({
-        'userGroups': FieldValue.arrayUnion([value])
+          .doc(Provider.of<luser.User>(context, listen: false).userId.trim())
+          .update({
+        'userGroups': FieldValue.arrayUnion([value.id.toString().trim()])
       });
     });
     _groupName.clear();

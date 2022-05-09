@@ -16,7 +16,7 @@ class NewGroupForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            GroupIconPicker(null),
+            // GroupIconPicker(null),
             NewGroupFields(),
           ],
         ),

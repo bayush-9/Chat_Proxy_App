@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/user.dart';
+import 'package:chat_app/providers/user.dart' as luser;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final activeUser = Provider.of<User>(context, listen: false);
+    final activeUser = Provider.of<luser.User>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
               ),
               CircleAvatar(
                 backgroundColor: Colors.grey[800],
-                backgroundImage: NetworkImage(snapshot.data()['userImage']),
+                backgroundImage: NetworkImage(snapshot.data['userImage']),
                 radius: MediaQuery.of(context).size.width / 3,
               ),
               Card(

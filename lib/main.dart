@@ -44,6 +44,7 @@ class App extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   Map<int, Color> color = {1: Color.fromARGB(255, 242, 101, 121)};
   @override

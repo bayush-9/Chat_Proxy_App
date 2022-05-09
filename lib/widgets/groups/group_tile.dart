@@ -20,7 +20,6 @@ class GroupTile extends StatelessWidget {
               .setActiveGroup(groupId, groupName);
           Navigator.of(context).pushNamed(ChatScreen.routeName);
         },
-        leading: CircleAvatar(),
         title: Text(
           groupName,
           style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),

@@ -48,7 +48,7 @@ class _Work2State extends State<Work2> {
           }
           List.from(value.data()['userGroups']).forEach((element) {
             var data = new GroupId(element.toString());
-            print(data);
+            // print(data);
             groupIdListL.add(data);
           });
         });

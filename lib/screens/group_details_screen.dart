@@ -16,7 +16,7 @@ class GroupDetails extends StatelessWidget {
         title:
             Text(Provider.of<Groups>(context, listen: false).activeGroup.name),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
+      body: FutureBuilder(
         future: users
             .doc(Provider.of<Groups>(context, listen: false).activeGroupId)
             .get(),
@@ -27,7 +27,8 @@ class GroupDetails extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data = snapshot.data.data as Object;
+            // Map<String, dynamic> data = snapshot.data;
+            print(snapshot.data);
             final Timestamp timestamp = snapshot.data['timeStamp'] as Timestamp;
             final DateTime dateTime = timestamp.toDate();
             return ListView(
@@ -44,7 +45,7 @@ class GroupDetails extends StatelessWidget {
                           fontSize: 20,
                           color: Theme.of(context).textTheme.bodyText1.color),
                     ),
-                    title: Text(data['uniqueId'],
+                    title: Text(snapshot.data['uniqueId'],
                         style: TextStyle(
                             fontSize: 20,
                             color:
