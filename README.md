@@ -2,6 +2,15 @@
 
 A group chat app made in flutter. You can join a group with its unique joining ID and done!. You are good to go..
 
+**Frontend:** Flutter
+
+
+
+
+**Backend:** Flutter firestore, Firebase cloud messaging, Firebase cloud storage
+
+
+
 **Login screen:**
 ![image](https://user-images.githubusercontent.com/81760629/167446222-82e07096-d542-4d8a-897c-e6fa917d3c08.png) 
 
